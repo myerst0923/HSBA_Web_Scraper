@@ -1,0 +1,31 @@
+name: Scrape HSBA
+
+on:
+    workflow_dispatch
+
+jobs:
+  scraper:
+    runs-on: ubuntu-latest
+
+    permissions:
+        contents: write
+
+    # env: # Or as an environment variable
+    #   DB_HOST: ${{ secrets.DB_HOST }}
+    #   DB_DATABASE: ${{ secrets.DB_DATABASE }}
+    #   DB_PASS: ${{ secrets.DB_PASS }}
+    #   DB_USER: ${{ secrets.DB_USER }}
+
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Scrape-HSBA
+        run: |
+          sudo apt-get update
+          pip install -r requirements.txt
+          python app/main.py
+
+      - name: Commit Changes
+        id: auto-commit-action
+        uses: stefanzweifel/git-auto-commit-action@v5
